@@ -74,5 +74,43 @@ namespace ConsoleApp1
             }
             return sb.ToString();
         }
+
+        public string Head(int n = 5)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"Start of {Name} first {n} from {Items.Count}");
+            for (int i = 0; i < n; i++)
+            {
+                sb.AppendLine($"{Items[i]}");
+            }
+
+            return sb.ToString();
+        }
+        public string Tail(int n = 5)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = Items.Count-n; i < Items.Count; i++)
+            {
+                sb.AppendLine($"{Items[i]}");
+            }
+            sb.Append($"End of {Name} last {n} from {Items.Count}");
+            return sb.ToString();
+        }
+
+        public string Table(int nStart=5, int nFromEnd=5)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(new string('=', 24));
+            sb.AppendLine(Head(nStart));
+            sb.AppendLine("...");
+            sb.AppendLine(Tail(nFromEnd));
+            sb.AppendLine(new string('=', 24));
+            return sb.ToString();
+        }
+
+        public void ForEach(Action<double> func)
+        {
+            Items.ForEach(func);
+        }
     }
 }
