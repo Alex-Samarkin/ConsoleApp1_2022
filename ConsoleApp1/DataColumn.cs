@@ -11,6 +11,7 @@ namespace ConsoleApp1
     /// </summary>
     public class DataColumn
     {
+        #region MyRegion
         /// <summary>
         /// имя колонки 
         /// </summary>
@@ -27,7 +28,9 @@ namespace ConsoleApp1
         /// </summary>
         /// <param name="d">переменная, которая добавляется к списку</param>
         public void Add(double d) => Items.Add(d);
+        #endregion
 
+        #region Fill
         /// <summary>
         /// заполнить интервал от start до stop с шагом step
         /// </summary>
@@ -63,6 +66,7 @@ namespace ConsoleApp1
         public void Fill(double d, int N) => Seq(d, 0, N);
         public void Zeros(int N) => Fill(0, N);
         public void Ones(int N) => Fill(1, N);
+        #endregion
 
         public override string ToString()
         {
@@ -75,6 +79,7 @@ namespace ConsoleApp1
             return sb.ToString();
         }
 
+        #region Table
         public string Head(int n = 5)
         {
             StringBuilder sb = new StringBuilder();
@@ -83,7 +88,6 @@ namespace ConsoleApp1
             {
                 sb.AppendLine($"{Items[i]}");
             }
-
             return sb.ToString();
         }
         public string Tail(int n = 5)
@@ -96,7 +100,6 @@ namespace ConsoleApp1
             sb.Append($"End of {Name} last {n} from {Items.Count}");
             return sb.ToString();
         }
-
         public string Table(int nStart=5, int nFromEnd=5)
         {
             StringBuilder sb = new StringBuilder();
@@ -107,10 +110,70 @@ namespace ConsoleApp1
             sb.AppendLine(new string('=', 24));
             return sb.ToString();
         }
+        #endregion
 
         public void ForEach(Action<double> func)
         {
             Items.ForEach(func);
         }
+
+        private int Seed = 0;
+        private Random r = new Random();
+
+        public void Random(int n, int newSeed = 0)
+        {
+            Seed = newSeed;
+            Items.Clear();
+            r = new Random(Seed);
+            for (int i = 0; i < n; i++)
+            {
+                Items.Add(r.NextDouble());
+            }
+        }
+        public void RandomInt(int n, int newSeed = 0)
+        {
+            Seed = newSeed;
+            Items.Clear();
+            r = new Random(Seed);
+            for (int i = 0; i < n; i++)
+            {
+                Items.Add(r.Next());
+            }
+        }
+        public void RandomInt(int MaxValue,int n, int newSeed = 0)
+        {
+            Seed = newSeed;
+            Items.Clear();
+            r = new Random(Seed);
+            for (int i = 0; i < n; i++)
+            {
+                Items.Add(r.Next(MaxValue));
+            }
+        }
+        public void RandomIntPrint(int MaxValue, int n, int newSeed = 0)
+        {
+            Seed = newSeed;
+            Items.Clear();
+            r = new Random(Seed);
+            for (int i = 0; i < n; i++)
+            {
+                int j = r.Next(MaxValue);
+                Items.Add(j);
+                Console.Write($"{i,4} {j,4} |");
+                Console.WriteLine(new string('=',j));
+            }
+        }
+        public void RandomInt(int MinValue, int MaxValue, int n, int newSeed = 0)
+        {
+            Seed = newSeed;
+            Items.Clear();
+            r = new Random(Seed);
+            for (int i = 0; i < n; i++)
+            {
+                Items.Add(r.Next(MinValue, MaxValue));
+            }
+        }
+
+
     }
 }

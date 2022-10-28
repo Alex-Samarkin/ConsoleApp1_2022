@@ -20,6 +20,10 @@ namespace ConsoleApp1
             dc.ForEach(x=>Console.Write(x=x*x));
             Console.WriteLine();
             Console.WriteLine(dc.Table());
+            //
+            dc.Random(1000);
+            Console.WriteLine(dc.Table());
+            dc.RandomIntPrint(120,1000);
             Console.ReadLine();
         }
     }
