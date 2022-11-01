@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -112,6 +113,16 @@ namespace ConsoleApp1
         }
         #endregion
 
+        public void ToFile(string ext = "txt")
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(Name);
+            foreach (var item in Items)
+            {
+                sb.AppendLine($"{item}");
+            }
+            System.IO.File.WriteAllText($"{Name}.{ext}", sb.ToString());
+        }
         public void ForEach(Action<double> func)
         {
             Items.ForEach(func);
@@ -174,6 +185,49 @@ namespace ConsoleApp1
             }
         }
 
+        public void RandomUniform(double from, double to, int N, int NewSeed = 0)
+        {
+            double h = (to - from);
+            Items.Clear();
+            Seed = NewSeed;
+            r = new Random(Seed);
+            for (int i = 0; i < N; i++)
+            {
+                // от from до from+h = to
+                double d = from + h * r.NextDouble();
+                Items.Add(d);
+            }
+        }
+        public void RandomNormal(double mean, double sd, int N, int NewSeed = 0)
+        {
+            Items.Clear();
+            Seed = NewSeed;
+            r = new Random(Seed);
 
+            int byNpoint = 5;
+
+            for (int i = 0; i < N; i++)
+            {
+                double d = 0;
+                for (int j = 0; j < byNpoint; j++)
+                {
+                    d+=(r.NextDouble()-0.5);
+                }
+                d = d * 2.0/1.2 * sd + mean;
+                Items.Add(d);
+            }
+        }
+
+        public static DataColumn operator +(DataColumn dc, double x)
+        {
+            for (int i = 0; i < dc.Items.Count; i++)
+            {
+                dc.Items[i] += x;
+            }
+
+            return dc;
+        }
     }
+
+
 }

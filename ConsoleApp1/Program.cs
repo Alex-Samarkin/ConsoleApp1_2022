@@ -25,6 +25,10 @@ namespace ConsoleApp1
             Console.WriteLine(dc.Table());
             dc.RandomIntPrint(120,1000);
             Console.ReadLine();
+            dc.RandomUniform(0,100,1000);
+            dc.ToFile("csv");
+            dc.RandomNormal(5, 1, 1000, 100);
+            dc.ToFile("csv");
         }
     }
 }
