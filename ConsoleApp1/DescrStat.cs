@@ -54,16 +54,47 @@ namespace ConsoleApp1
         /// <summary>
         /// самостоятельно
         /// </summary>
-        public double Disp => 1;
-        public double StdDev => 1;
+        // public double Disp => Sum2(Mean)/((double)Count-1.0);
+        public double Var
+        {
+            get
+            {
+                var m = Mean; 
+                return Sum2(m) / ((double)Count - 1.0);
+            }
+        }
+
+        // public double StdDev => 1;
+        public double StdDev => Math.Sqrt(Var);
 
         /// <summary>
         /// после обсуждения
         /// </summary>
         /// <returns></returns>
-        public DataColumn Histogram()
+        public DataColumn Histogram(int Bins = 0)
         {
-            return new DataColumn();
+            if (Bins < 2)
+            {
+                Bins = (int)(3.2 * Math.Log(Count) + 1.0);
+            }
+            double h = Range / (double)(Bins-1);
+            DataColumn hist = new DataColumn();
+            hist.Name = $"Histogramm of {sortedColumn.Name}";
+            for (int i = 0; i < Bins; i++)
+            {
+                double h0 = Min - h / 2 + h * i;
+                double h1 = h0+h;
+                int j = 0;
+                while (sortedColumn.Items[j]<h1)
+                {
+                    j++;
+                    if(j>= Count) break;
+                }
+                hist.Add(j);
+            }
+
+            hist = hist.Diff();
+            return hist;
         }
     }
 }

@@ -34,6 +34,14 @@ namespace ConsoleApp1
 
             dc2.Name = "abs_log_dc";
             dc2.ToFile("csv");
+
+            DescrStat ds = new DescrStat();
+            ds.DataColumn = dc2;
+            ds.SortData();
+            Console.WriteLine($"Min {ds.Min} Max {ds.Max} Median {ds.Median} Mean {ds.Mean} StdDev {ds.StdDev}");
+            Console.ReadLine();
+            DataColumn h = ds.Histogram();
+            h.ToFile("csv");
         }
     }
 }

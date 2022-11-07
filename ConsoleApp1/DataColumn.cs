@@ -116,13 +116,21 @@ namespace ConsoleApp1
 
         public void ToFile(string ext = "txt")
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Name);
-            foreach (var item in Items)
+            // если файл открыт в Excel, то будет исключение
+            try
             {
-                sb.AppendLine($"{item}");
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(Name);
+                foreach (var item in Items)
+                {
+                    sb.AppendLine($"{item}");
+                }
+                System.IO.File.WriteAllText($"{Name}.{ext}", sb.ToString());
             }
-            System.IO.File.WriteAllText($"{Name}.{ext}", sb.ToString());
+            catch
+            {
+                Console.WriteLine("Ошибка создания файла или записи в файл");
+            }
         }
         public void ForEach(Action<double> func)
         {
@@ -369,7 +377,36 @@ namespace ConsoleApp1
 
         }
 
+        public DataColumn Diff(int delta = 1)
+        {
+            DataColumn res = new DataColumn(this);
+            for (int i = delta; i < res.Items.Count; i++)
+            {
+                res.Items[i] -= Items[i-delta];
+            }
+            return res;
+        }
 
+        public DataColumn MA(int window = 6)
+        {
+            DataColumn res = new DataColumn(this);
+            for (int i = 0; i < res.Items.Count - window; i++)
+            {
+                double sum = 0;
+                for (int j = 0; j < window; j++)
+                {
+                    sum += res.Items[i + j];
+                }
+                res.Items[i] = sum/(double)window;
+            }
+
+            double ma = res.Items[res.Items.Count - window - 1];
+            for (int i = res.Items.Count - window; i < res.Items.Count - window; i++)
+            {
+                res.Items[i] = ma;
+            }
+            return res;
+        }
         #endregion
 
     }
