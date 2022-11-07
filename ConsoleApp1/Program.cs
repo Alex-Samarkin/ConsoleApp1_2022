@@ -14,21 +14,26 @@ namespace ConsoleApp1
             dc.Seq(0,0.1,500);
             // output and waiting for Enter key
             Console.WriteLine(dc.ToString());
-            Console.WriteLine(dc.Head());
-            Console.WriteLine(dc.Tail());
-            Console.WriteLine(dc.Table());
-            dc.ForEach(x=>Console.Write(x=x*x));
-            Console.WriteLine();
             Console.WriteLine(dc.Table());
             //
-            dc.Random(1000);
-            Console.WriteLine(dc.Table());
             dc.RandomIntPrint(120,1000);
             Console.ReadLine();
+            //
+            dc.Name = "uniform";
             dc.RandomUniform(0,100,1000);
             dc.ToFile("csv");
-            dc.RandomNormal(5, 1, 1000, 100);
+            //
+            dc.Name = "normal";
+            dc.RandomNormal(-2, 3, 1000, 100);
+            dc = dc+2;
             dc.ToFile("csv");
+
+            DataColumn dc2 = dc.ApplyFunc(Math.Abs)+0.1;
+
+            dc2 = dc2.ApplyFunc(Math.Log);
+
+            dc2.Name = "abs_log_dc";
+            dc2.ToFile("csv");
         }
     }
 }

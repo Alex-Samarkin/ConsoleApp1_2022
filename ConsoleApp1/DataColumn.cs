@@ -12,7 +12,7 @@ namespace ConsoleApp1
     /// </summary>
     public class DataColumn
     {
-        #region MyRegion
+        #region Fields
         /// <summary>
         /// имя колонки 
         /// </summary>
@@ -42,7 +42,7 @@ namespace ConsoleApp1
         {
             Items.Clear();
             double d = start;
-            while (d<stop)
+            while (d < stop)
             {
                 Items.Add(d);
                 d += step;
@@ -51,8 +51,8 @@ namespace ConsoleApp1
 
         public void Linspace(double start, int N, double stop)
         {
-            double step = (stop-start) / N;
-            Arange(start,step,stop);
+            double step = (stop - start) / N;
+            Arange(start, step, stop);
         }
 
         public void Seq(double start, double step, int N)
@@ -60,7 +60,7 @@ namespace ConsoleApp1
             Items.Clear();
             for (int i = 0; i < N; i++)
             {
-                Items.Add((double)i*step+start);
+                Items.Add((double)i * step + start);
             }
         }
 
@@ -69,18 +69,7 @@ namespace ConsoleApp1
         public void Ones(int N) => Fill(1, N);
         #endregion
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Name);
-            foreach (double d in Items)
-            {
-                sb.AppendLine($"{d}");
-            }
-            return sb.ToString();
-        }
-
-        #region Table
+        #region Out to Table
         public string Head(int n = 5)
         {
             StringBuilder sb = new StringBuilder();
@@ -94,14 +83,14 @@ namespace ConsoleApp1
         public string Tail(int n = 5)
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = Items.Count-n; i < Items.Count; i++)
+            for (int i = Items.Count - n; i < Items.Count; i++)
             {
                 sb.AppendLine($"{Items[i]}");
             }
             sb.Append($"End of {Name} last {n} from {Items.Count}");
             return sb.ToString();
         }
-        public string Table(int nStart=5, int nFromEnd=5)
+        public string Table(int nStart = 5, int nFromEnd = 5)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(new string('=', 24));
@@ -112,6 +101,18 @@ namespace ConsoleApp1
             return sb.ToString();
         }
         #endregion
+
+        #region Out to string and to file
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(Name);
+            foreach (double d in Items)
+            {
+                sb.AppendLine($"{d}");
+            }
+            return sb.ToString();
+        }
 
         public void ToFile(string ext = "txt")
         {
@@ -128,9 +129,25 @@ namespace ConsoleApp1
             Items.ForEach(func);
         }
 
+
+        #endregion
+
+        #region Random data
+
+        /// <summary>
+        /// затравка
+        /// </summary>
         private int Seed = 0;
+        /// <summary>
+        /// генератор случайных чисел (стандартный)
+        /// </summary>
         private Random r = new Random();
 
+        /// <summary>
+        /// заполнить десятичными дробями от 0 до 1
+        /// </summary>
+        /// <param name="n">объем выборки</param>
+        /// <param name="newSeed"></param>
         public void Random(int n, int newSeed = 0)
         {
             Seed = newSeed;
@@ -141,6 +158,11 @@ namespace ConsoleApp1
                 Items.Add(r.NextDouble());
             }
         }
+        /// <summary>
+        /// заполнить целыми числами
+        /// </summary>
+        /// <param name="n">объем выборки</param>
+        /// <param name="newSeed"></param>
         public void RandomInt(int n, int newSeed = 0)
         {
             Seed = newSeed;
@@ -151,7 +173,13 @@ namespace ConsoleApp1
                 Items.Add(r.Next());
             }
         }
-        public void RandomInt(int MaxValue,int n, int newSeed = 0)
+        /// <summary>
+        /// заполнить целыми числами от 0 до максимального числа не включая
+        /// </summary>
+        /// <param name="MaxValue">максимальное число</param>
+        /// <param name="n">объем</param>
+        /// <param name="newSeed"></param>
+        public void RandomInt(int MaxValue, int n, int newSeed = 0)
         {
             Seed = newSeed;
             Items.Clear();
@@ -161,6 +189,13 @@ namespace ConsoleApp1
                 Items.Add(r.Next(MaxValue));
             }
         }
+        /// <summary>
+        /// заполнить целыми числами от 0 до MaxValue не включая
+        /// вывести на экран псевдографику
+        /// </summary>
+        /// <param name="MaxValue">максимальное число</param>
+        /// <param name="n">объем выборки</param>
+        /// <param name="newSeed"></param>
         public void RandomIntPrint(int MaxValue, int n, int newSeed = 0)
         {
             Seed = newSeed;
@@ -171,9 +206,16 @@ namespace ConsoleApp1
                 int j = r.Next(MaxValue);
                 Items.Add(j);
                 Console.Write($"{i,4} {j,4} |");
-                Console.WriteLine(new string('=',j));
+                Console.WriteLine(new string('=', j));
             }
         }
+        /// <summary>
+        /// заполнить целыми числами в диапазоне MinValue (включая) MaxValue (не включая)
+        /// </summary>
+        /// <param name="MinValue">от</param>
+        /// <param name="MaxValue">до</param>
+        /// <param name="n">объем</param>
+        /// <param name="newSeed"></param>
         public void RandomInt(int MinValue, int MaxValue, int n, int newSeed = 0)
         {
             Seed = newSeed;
@@ -184,7 +226,14 @@ namespace ConsoleApp1
                 Items.Add(r.Next(MinValue, MaxValue));
             }
         }
-
+        
+        /// <summary>
+        /// заполнить равномерно распределенными числами от from и до to
+        /// </summary>
+        /// <param name="from">от</param>
+        /// <param name="to">до</param>
+        /// <param name="N">объем</param>
+        /// <param name="NewSeed"></param>
         public void RandomUniform(double from, double to, int N, int NewSeed = 0)
         {
             double h = (to - from);
@@ -198,35 +247,131 @@ namespace ConsoleApp1
                 Items.Add(d);
             }
         }
+        
+        /// <summary>
+        /// генерирует одно число, распределенное по стандартному нормальному закону распределения
+        /// </summary>
+        /// <returns>нормально распределенное число</returns>
+        private double NormalRandomStd()
+        {
+            /// https://stackoverflow.com/questions/218060/random-gaussian-variables
+            /// Jarrett's suggestion of using
+            /// a Box-Muller transform
+            /// is good for a quick-and-dirty solution.
+            /// A simple implementation:
+            double u1 = 1.0 - r.NextDouble(); //uniform(0,1] random doubles
+            double u2 = 1.0 - r.NextDouble();
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                                   Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+            return randStdNormal;
+        }
+        /// <summary>
+        /// заполнить числами, распределенными по нормальному закону распределения
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="sd"></param>
+        /// <param name="N"></param>
+        /// <param name="NewSeed"></param>
         public void RandomNormal(double mean, double sd, int N, int NewSeed = 0)
         {
             Items.Clear();
             Seed = NewSeed;
             r = new Random(Seed);
 
-            int byNpoint = 5;
-
             for (int i = 0; i < N; i++)
             {
-                double d = 0;
-                for (int j = 0; j < byNpoint; j++)
-                {
-                    d+=(r.NextDouble()-0.5);
-                }
-                d = d * 2.0/1.2 * sd + mean;
+                double d = NormalRandomStd();
+                d = (d*sd)+mean;
                 Items.Add(d);
             }
         }
+        #endregion
 
+        #region Операторы
+
+        public DataColumn Copy()
+        {
+            DataColumn res = new DataColumn();
+            res.Name = Name;
+            double[] a = new double[Items.Count];
+            Items.CopyTo(a);
+            res.Items.AddRange(a);
+            res.Seed = Seed;
+            res.r = new Random();
+            return res;
+        }
+
+        public DataColumn()
+        {
+        }
+
+        public DataColumn(DataColumn dc)
+        {
+            Name = dc.Name;
+            double[] a = new double[dc.Items.Count];
+            dc.Items.CopyTo(a);
+            Items.AddRange(a);
+            Seed = dc.Seed;
+            r = new Random();
+        }
+
+        /// <summary>
+        /// унарный оператор + возвращает копию колонки
+        /// </summary>
+        /// <param name="dc">копируемая колонка</param>
+        /// <returns>копия колонки</returns>
+        public static DataColumn operator +(DataColumn dc) => new DataColumn(dc);
+
+        public static DataColumn operator -(DataColumn dc) => dc*(-1.0);
+
+        /// <summary>
+        /// бинарный оператор + возвращает копию колонки и плюсует к ее данным константу
+        /// </summary>
+        /// <param name="dc"></param>
+        /// <param name="x">константа для прибавления</param>
+        /// <returns>новая колонка</returns>
         public static DataColumn operator +(DataColumn dc, double x)
         {
+            DataColumn res = new DataColumn(dc);
             for (int i = 0; i < dc.Items.Count; i++)
             {
-                dc.Items[i] += x;
+                res.Items[i] += x;
             }
-
-            return dc;
+            return res;
         }
+
+        public static DataColumn operator *(DataColumn dc, double x)
+        {
+            DataColumn res = new DataColumn(dc);
+            for (int i = 0; i < dc.Items.Count; i++)
+            {
+                res.Items[i] *= x;
+            }
+            return res;
+        }
+        public static DataColumn operator /(DataColumn dc, double x) =>dc*(1.0/x);
+
+        /// <summary>
+        /// применение к колонке функции одного переменного
+        /// 
+        /// </summary>
+        /// <param name="dc"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public DataColumn ApplyFunc(Func<double, double> func)
+        {
+            DataColumn res = new DataColumn(this);
+            for (int i = 0; i < res.Items.Count; i++)
+            {
+                res.Items[i] = func(res.Items[i]);
+            }
+            return res;
+
+        }
+
+
+        #endregion
+
     }
 
 
